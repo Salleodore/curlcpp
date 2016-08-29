@@ -24,3 +24,10 @@ endif()
 add_library(curlcpp ${CURLCPP_SOURCE})
 target_link_libraries(curlcpp ${CURL_LIBRARY})
 install (TARGETS curlcpp LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+
+if (APPLE)
+
+target_link_libraries(curlcpp PUBLIC "-framework CoreFoundation" ) 
+target_link_libraries(curlcpp PUBLIC "-framework Security" ) 
+
+endif (APPLE)
