@@ -29,7 +29,11 @@
     #define NOEXCEPT
     #include <ciso646>
 #else
-    #define NOEXCEPT noexcept
+#   if defined(_NOEXCEPT)
+#       define NOEXCEPT _NOEXCEPT
+#   else
+#       define NOEXCEPT noexcept
+#   endif
 #endif
 
 #endif /* defined(__curlcpp__curl_config__) */

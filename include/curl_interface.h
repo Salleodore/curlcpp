@@ -91,7 +91,7 @@ namespace curl {
 
     // Implementation of the static initialization function
     template<class T> void curl_interface<T>::init(const long flag) {
-        static global_initialisator _instance {flag};
+        static global_initialisator _instance (flag);
     }
 
     // Implementation of the singleton initalizator

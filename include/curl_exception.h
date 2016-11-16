@@ -84,9 +84,10 @@ namespace curl {
 
     // Implementation of print_traceback
     inline void curl_exception::print_traceback() const {
-        std::for_each(curl_exception::traceback.begin(),curl_exception::traceback.end(),[](const curlcpp_traceback_object &value) {
+        for(const curlcpp_traceback_object &value: curl_exception::traceback)
+        {
             std::cout<<"ERROR: "<<value.first<<" ::::: FUNCTION: "<<value.second<<std::endl;
-        });
+        }
     }
     
     // Implementation of get_traceback.
