@@ -102,6 +102,18 @@ void curl_form::add(const curl_pair<CURLformoption,string> &form_name, const cur
     }
 }
 
+// Implementation of add overloaded method for CURLFORM_BUFFERPTR uses
+void curl_form::add(const curl_pair<CURLformoption,string> &form_name, const curl_pair<CURLformoption,string> &form_bufname, const curl_pair<CURLformoption, char*> &form_content, const curl_pair<CURLformoption,long> &content_length) {
+    if (curl_formadd(&this->form_post,&this->last_ptr,
+                    form_name.first(),form_name.second(),
+                    form_bufname.first(),form_bufname.second(),
+                    form_content.first(),form_content.second(),
+                    content_length.first(),content_length.second(),
+                    CURLFORM_END) != 0) {
+        throw curl_exception("Error while adding the form",__FUNCTION__);
+    }
+}
+
 /**
  * If you want to upload more than one file, you can pass the form name and a 
  * vector of filenames.
@@ -109,7 +121,7 @@ void curl_form::add(const curl_pair<CURLformoption,string> &form_name, const cur
 void curl_form::add(const curl_pair<CURLformoption,string> &form_name, const vector<string> &files) {
     const size_t size = files.size();
     struct curl_forms *new_files;
-    this->is_null(new_files = (struct curl_forms *)calloc(size,sizeof(struct curl_forms)));
+    this->is_null(new_files = new struct curl_forms[size]);
     if (new_files == nullptr) {
         throw bad_alloc();
     }

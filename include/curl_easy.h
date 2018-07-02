@@ -432,7 +432,7 @@ namespace curl  {
         CURLCPP_DEFINE_OPTION(CURLOPT_DNS_CACHE_TIMEOUT, long);
 
         /* send linked-list of pre-transfer QUOTE commands */
-        CURLCPP_DEFINE_OPTION(CURLOPT_PREQUOTE, const char*);
+        CURLCPP_DEFINE_OPTION(CURLOPT_PREQUOTE, curl_slist*);
 
         /* set the debug function */
         CURLCPP_DEFINE_OPTION(CURLOPT_DEBUGFUNCTION, int(*)(CURL *handle,
@@ -869,6 +869,9 @@ namespace curl  {
 
         /* Set the SMTP auth originator */
         CURLCPP_DEFINE_OPTION(CURLOPT_MAIL_AUTH, const char*);
+
+        /* Wait for pipelining/multiplexing */
+        CURLCPP_DEFINE_OPTION(CURLOPT_PIPEWAIT, long);
 
         /* Options added in 7.31 */
 #if defined(LIBCURL_VERSION_NUM) && LIBCURL_VERSION_NUM >= 0x071F00

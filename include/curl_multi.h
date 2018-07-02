@@ -213,17 +213,15 @@ namespace curl {
          * to initialize the entire curl environment using custom
          * options.
          */
-        explicit curl_multi(const long);
+        explicit curl_multi(const long globalOptions);
         /**
-         * Copy constructor to perform a correct copy of the curl 
-         * handler and attributes.
+         * Move constructor which moves internal data to another object.
          */
-        curl_multi(const curl_multi &);
+        curl_multi(curl_multi&&) NOEXCEPT;
         /**
-         * Assignment operator. Let's apply the rule of three to
-         * avoid strange situations!
+         * Move assignment operator which moves internal data to another object.
          */
-        curl_multi &operator=(const curl_multi &);
+        curl_multi& operator=(curl_multi&&) NOEXCEPT;
         /**
          * Destructor to deallocate all the resources using
          * libcurl.
@@ -323,15 +321,21 @@ namespace curl {
          */
         CURLM *get_curl() const;
     private:
+        struct multi_deleter {
+            void operator()(CURLM* ptr) const;
+        };
+
+        using multi_ptr = std::unique_ptr<CURLM, multi_deleter>;
+
         int message_queued;
         int active_transfers;
-        CURLM *curl;
+        multi_ptr curl;
         std::unordered_map<CURL*, curl_easy*> handles;
     };
     
     // Implementation of add method
     template<typename T> void curl_multi::add(const curl_pair<CURLMoption,T> &pair) {
-        const CURLMcode code = curl_multi_setopt(this->curl,pair.first(),pair.second());
+        const CURLMcode code = curl_multi_setopt(this->curl.get(),pair.first(),pair.second());
         if (code != CURLM_OK) {
             throw curl_multi_exception(code,__FUNCTION__);
         }
@@ -346,7 +350,7 @@ namespace curl {
 
     // Implementation of overloaded add method.
     template <CURLMoption Opt> void curl_multi::add(detail::MOption_type<Opt> val) {
-        const auto code = curl_multi_setopt(this->curl, Opt, val);
+        const auto code = curl_multi_setopt(this->curl.get(), Opt, val);
         if (code != CURLM_OK) {
             throw curl_multi_exception(code, __FUNCTION__);
         }
@@ -375,11 +379,6 @@ namespace curl {
     // Implementation of curl_message get_other method.
     inline const void *curl_multi::curl_message::get_other() const {
         return this->whatever;
-    }
-
-    // Implementation of get_curl method.
-    inline CURLM *curl_multi::get_curl() const {
-        return this->curl;
     }
 }
 
