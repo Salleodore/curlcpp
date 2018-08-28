@@ -6,7 +6,7 @@ IF(BIICODE)
 ELSE()
     cmake_minimum_required(VERSION 2.8)
     #if using an older VERSION of curl ocsp stapling can be disabled
-    set(CURL_MIN_VERSION "7.28.0")
+    #set(CURL_MIN_VERSION "7.61.0-DEV")
     # Setting up project
     project(CURLCPP)
 
@@ -16,13 +16,16 @@ ELSE()
       set(CMAKE_PREFIX_PATH /opt/local ${CMAKE_PREFIX_PATH})
     endif()
 
+	set(CURL_LIBRARY libcurl)
+	
     # Checking for dependencies
     find_package(CURL ${CURL_MIN_VERSION} REQUIRED)
 
+	
     # Set up include pathes
-    include_directories(${CURL_INCLUDE_DIRS}
-      ${CURLCPP_SOURCE_DIR}/include)
-
+    include_directories(${CURLCPP_SOURCE_DIR}/include
+		${CURL_INCLUDE_DIRS})
+	
     file(GLOB HEADER_LIST "${CMAKE_SOURCE_DIR}/include/*.h")
     install (FILES ${HEADER_LIST} DESTINATION include)
 
