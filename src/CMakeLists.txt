@@ -23,6 +23,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif()
 
 add_library(curlcpp ${CURLCPP_SOURCE})
+target_include_directories(curlcpp PRIVATE 
+	../../curl
+	../../curl/include)
 target_link_libraries(curlcpp ${CURL_LIBRARY})
 install (TARGETS curlcpp LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 

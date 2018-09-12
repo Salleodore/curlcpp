@@ -19,7 +19,7 @@ ELSE()
 	set(CURL_LIBRARY libcurl)
 	
     # Checking for dependencies
-    find_package(CURL ${CURL_MIN_VERSION} REQUIRED)
+    #find_package(CURL ${CURL_MIN_VERSION} REQUIRED)
 
 	
     # Set up include pathes
