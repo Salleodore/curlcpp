@@ -6,7 +6,9 @@ IF(BIICODE)
 ELSE()
     cmake_minimum_required(VERSION 2.8)
     #if using an older VERSION of curl ocsp stapling can be disabled
-    #set(CURL_MIN_VERSION "7.61.0-DEV")
+	if( UNIX AND NOT APPLE )
+		set(CURL_MIN_VERSION "7.28.0")
+	endif()
     # Setting up project
     project(CURLCPP)
 
@@ -16,10 +18,14 @@ ELSE()
       set(CMAKE_PREFIX_PATH /opt/local ${CMAKE_PREFIX_PATH})
     endif()
 
-	set(CURL_LIBRARY libcurl)
+	if( ANDROID )
+		set(CURL_LIBRARY libcurl)
+	endif()
 	
     # Checking for dependencies
-    #find_package(CURL ${CURL_MIN_VERSION} REQUIRED)
+	if( UNIX AND NOT APPLE )
+		find_package(CURL ${CURL_MIN_VERSION} REQUIRED)
+	endif()
 
 	
     # Set up include pathes
