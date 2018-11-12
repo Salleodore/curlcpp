@@ -6,7 +6,7 @@ IF(BIICODE)
 ELSE()
     cmake_minimum_required(VERSION 2.8)
     #if using an older VERSION of curl ocsp stapling can be disabled
-	if( UNIX AND NOT APPLE )
+	if( UNIX AND NOT APPLE AND NOT ANDROID )
 		set(CURL_MIN_VERSION "7.28.0")
 	endif()
     # Setting up project
@@ -23,7 +23,7 @@ ELSE()
 	endif()
 	
     # Checking for dependencies
-	if( UNIX AND NOT APPLE )
+	if( UNIX AND NOT APPLE AND NOT ANDROID )
 		find_package(CURL ${CURL_MIN_VERSION} REQUIRED)
 	endif()
 
