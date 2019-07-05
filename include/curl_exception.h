@@ -96,7 +96,7 @@ namespace curl {
         /**
          * Locker for inserting traceback.
          */
-         static std::mutex tracebackLocker;
+         static std::recursive_mutex tracebackLocker;
     };
 
     // Implementation of print_traceback
